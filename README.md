@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # 📊 Telecom X – Previsão de Churn de Clientes
 
 ## 📌 Descrição do Projeto
