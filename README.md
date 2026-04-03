@@ -473,6 +473,41 @@ telecomx-churn-analysis
 
 ---
 
+## 🚀 Deploy da Aplicação (Streamlit Cloud)
+
+A aplicação interativa de previsão de churn foi disponibilizada online utilizando o **Streamlit Cloud**, permitindo simular cenários de clientes em tempo real.
+
+---
+
+## 🌐 Acesse a aplicação
+
+👉 **Link do app:**  
+https://SEU-LINK.streamlit.app  
+
+---
+
+## ⚙️ Como foi feito o deploy
+
+O deploy foi realizado utilizando o serviço oficial do Streamlit:
+
+- Repositório hospedado no GitHub  
+- Arquivo principal: `app.py` (ou nome equivalente)  
+- Modelo salvo com `joblib` (`model.pkl`)  
+- Dataset tratado (`dados_tratados.csv`)  
+
+---
+
+## 📌 Passos principais
+
+1. Subir o projeto para o GitHub  
+2. Acessar: https://streamlit.io/cloud  
+3. Conectar sua conta GitHub  
+4. Selecionar o repositório  
+5. Definir o arquivo principal (ex: `app.py`)  
+6. Deploy automático 🚀  
+
+---
+
 #  Autor
 Adilson Nascimento
 Projeto desenvolvido para o desafio de **Data Science – Telecom X**.
