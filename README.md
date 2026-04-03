@@ -516,6 +516,10 @@ Projeto desenvolvido para o desafio de **Data Science – Telecom X**.
 
 # 📎 Observação
 
+<<<<<<< HEAD
 Este projeto tem finalidade **educacional e analítica**, demonstrando a aplicação de técnicas de **Machine Learning para previsão de churn de clientes**
 
 ---
+=======
+Este projeto tem finalidade **educacional e analítica**, demonstrando a aplicação de técnicas de **Machine Learning para previsão de churn de clientes**.
+>>>>>>> 121e69d7e3777df95f862c5c6fc3e99b587b9f89
