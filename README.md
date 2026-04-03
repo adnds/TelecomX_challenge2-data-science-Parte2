@@ -482,7 +482,7 @@ A aplicação interativa de previsão de churn foi disponibilizada online utiliz
 ## 🌐 Acesse a aplicação
 
 👉 **Link do app:**  
-https://SEU-LINK.streamlit.app  
+(https://previsortelecomxchallenge2.streamlit.app/)
 
 ---
 
