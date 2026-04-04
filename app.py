@@ -2,7 +2,6 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
-from sklearn.ensemble import GradientBoostingClassifier
 import joblib
 import os
 
@@ -37,7 +36,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ==============================
-# LOAD OU TREINA MODELO
+# LOAD MODEL (APENAS INFERÊNCIA)
 # ==============================
 @st.cache_resource
 def load_model():
@@ -58,41 +57,17 @@ def load_model():
         "payment": "account.PaymentMethod",
     }
 
-    # ==============================
-    # 1. TENTAR CARREGAR MODELO
-    # ==============================
-    if os.path.exists("model.pkl"):
-        model, feature_cols = joblib.load("model.pkl")
-        return model, feature_cols, COLS
+    if not os.path.exists("model.pkl"):
+        st.error("❌ Modelo não encontrado. Faça upload do model.pkl no repositório.")
+        st.stop()
 
-    # ==============================
-    # 2. TREINAR MODELO
-    # ==============================
-    if not os.path.exists("dados_tratados.csv"):
-        raise FileNotFoundError("dados_tratados.csv não encontrado")
+    model, feature_cols = joblib.load("model.pkl")
 
-    df = pd.read_csv("dados_tratados.csv")
-    df = df.dropna(subset=["Churn"])
-
-    df["avg_monthly_spend"] = df[COLS["total"]] / (df[COLS["tenure"]] + 1)
-    df["cliente_novo"] = (df[COLS["tenure"]] < 12).astype(int)
-
-    X = df.drop(columns=["Churn"])
-    y = df["Churn"]
-
-    X = pd.get_dummies(X, drop_first=True)
-
-    model = GradientBoostingClassifier(random_state=42)
-    model.fit(X, y)
-
-    # salvar modelo
-    joblib.dump((model, X.columns.tolist()), "model.pkl")
-
-    return model, X.columns.tolist(), COLS
+    return model, feature_cols, COLS
 
 
 # ==============================
-# CARREGAR
+# CARREGAR MODELO
 # ==============================
 try:
     model, feature_cols, COLS = load_model()
@@ -103,7 +78,7 @@ except Exception as e:
 # ==============================
 # UI
 # ==============================
-st.title("🚀 Previsor de Rotatividade de Cliente ")
+st.title("🚀 Previsor de Rotatividade de Cliente")
 st.caption("Sistema inteligente de previsão de churn")
 
 # ==============================
@@ -157,8 +132,17 @@ input_dict = {
 
 input_df = pd.DataFrame(input_dict)
 
+# ==============================
+# ENCODING ROBUSTO
+# ==============================
 input_encoded = pd.get_dummies(input_df, drop_first=True)
-input_encoded = input_encoded.reindex(columns=feature_cols, fill_value=0)
+
+# garantir mesmas colunas do treino
+for col in feature_cols:
+    if col not in input_encoded.columns:
+        input_encoded[col] = 0
+
+input_encoded = input_encoded[feature_cols]
 input_encoded = input_encoded.apply(pd.to_numeric, errors="coerce").fillna(0)
 
 # ==============================
@@ -166,7 +150,11 @@ input_encoded = input_encoded.apply(pd.to_numeric, errors="coerce").fillna(0)
 # ==============================
 if st.button("🚀 Analisar Cliente"):
 
-    prob = model.predict_proba(input_encoded)[0][1]
+    try:
+        prob = model.predict_proba(input_encoded)[0][1]
+    except Exception as e:
+        st.error(f"Erro na previsão: {e}")
+        st.stop()
 
     col1, col2, col3 = st.columns(3)
 
